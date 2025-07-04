@@ -1,0 +1,255 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f6f9;
+  color: #333;
+}
+
+/* ========== Основной контейнер ========== */
+.page-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* ========== Левая панель ========== */
+.left-panel {
+  flex: 1;
+  min-width: 320px;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ========== Правая панель ========== */
+.right-panel {
+  width: 320px;
+  max-width: 100%;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+/* ========== Заголовки ========== */
+h1 {
+  font-size: 26px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 20px 0 10px;
+}
+
+/* ========== Выбор типа перевода ========== */
+.translation-type .option-box {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 12px;
+  background: #fefefe;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.option-box:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.option-box input {
+  margin-right: 10px;
+  margin-top: 4px;
+}
+
+.option-box.selected {
+  border-color: #007bff;
+  background: #f4faff;
+}
+
+.price-label {
+  margin-left: auto;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* ========== Языки и страницы ========== */
+.language-section label,
+.page-count-section label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+select,
+input[type="number"] {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  appearance: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+select:focus,
+input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+input[readonly] {
+  background-color: #f3f3f3;
+  cursor: not-allowed;
+}
+
+/* ========== Загрузка файлов ========== */
+.upload-box {
+  margin-top: 10px;
+  padding: 30px;
+  border: 2px dashed #ccc;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: #f8f8f8;
+  transition: background-color 0.3s ease;
+}
+
+.upload-box:hover {
+  background-color: #e6f3ff;
+}
+
+/* ========== Список файлов ========== */
+.file-list {
+  margin-top: 15px;
+  padding: 0;
+  list-style: none;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+  font-size: 14px;
+  gap: 10px;
+}
+
+.file-number {
+  font-weight: bold;
+  color: #555;
+  min-width: 20px;
+}
+
+.file-link {
+  color: #007bff;
+  text-decoration: none;
+  word-break: break-word;
+  flex: 1;
+}
+
+.file-link:hover {
+  text-decoration: underline;
+}
+
+/* ========== Кнопка продолжения ========== */
+.continue-btn {
+  margin-top: 30px;
+  width: 100%;
+  padding: 14px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.continue-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* ========== Резюме заказа ========== */
+.order-summary h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.order-summary h2 {
+  font-size: 24px;
+  color: #007bff;
+  margin: 12px 0;
+}
+
+.security-note {
+  margin-top: 30px;
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}
+
+/* ========== Адаптация под мобильные устройства ========== */
+@media (max-width: 768px) {
+  .page-wrapper {
+    flex-direction: column;
+    padding: 20px 15px;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  .continue-btn {
+    font-size: 16px;
+  }
+
+  .upload-box {
+    padding: 24px;
+  }
+
+  .file-item {
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+
+  .file-link {
+    word-break: break-word;
+  }
+
+  .security-note {
+    font-size: 12px;
+    margin-top: 20px;
+  }
+}

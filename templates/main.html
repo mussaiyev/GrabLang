@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GrabLang - Certified Translation Services</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+
+  <!-- ✅ Navbar -->
+  <nav class="navbar">
+    <div class="logo">GrabLang</div>
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+    <ul class="nav-links" id="navMenu">
+      <li class="dropdown">
+        <a href="#">Services</a>
+        <div class="dropdown-content">
+          <a href="{{ url_for('index') }}" class="hover-card">
+            <div class="service-card">
+              <h4>Certified Translation</h4>
+              <p>Word-for-word document translation with certification letter for official use.</p>
+              <div class="card-bottom">
+                <span class="price">$24.95 <small>/ page</small></span>
+                <div class="arrow-circle"><span class="arrow">→</span></div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="{{ url_for('index') }}" class="order-now">Order Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- ✅ Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Online translation services <span class="highlight">you can count on</span></h1>
+      <p>Get certified translations starting at just $24.95 per page. Delivered in 24 hours. Simple. Fast. Reliable.</p>
+      <a href="{{ url_for('index') }}" class="cta-button">Start Your Order</a>
+    </div>
+
+    <div class="hero-images">
+      <img src="{{ url_for('static', filename='flag.jpg') }}" alt="Flags and translation" />
+    </div>
+  </section>
+
+  <!-- ✅ Translation Info Section -->
+  <section class="translation-section">
+    <div class="translation-container">
+      <h2>High-quality translations.<br><span class="sub">Fast, reliable results.</span></h2>
+      <p class="description">
+        We offer premium certified translation services designed for a variety of industries, use cases, and document types. 
+        Our team of native-speaking professional translators delivers precise, reliable translations in 65+ languages.
+      </p>
+    </div>
+
+    <div class="translation-card">
+      <div class="card-header">
+        <h3>Certified Translation</h3>
+        <div class="price">$24.95 <span>per page</span></div>
+      </div>
+
+      <p class="card-description">
+        Word-for-word document translation with certification letter for official use.
+      </p>
+
+      <div class="card-buttons">
+        <a href="{{ url_for('index') }}" class="cta-button">Start Your Order</a>
+      </div>
+
+      <ul class="card-features">
+        <li>✅ Delivered as a signed, stamped PDF</li>
+        <li>✅ Includes unlimited revisions and formatting</li>
+        <li>✅ Expedited service, notarization, apostille & hard copy available</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ✅ How It Works -->
+  <section class="how-it-works">
+    <h2>How it works</h2>
+    <p class="how-sub">Our streamlined process makes it easy to get your documents translated quickly and efficiently.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Upload documents & place your order</h3>
+        <p>Select your language pair, upload your documents, and add any optional services to get started.</p>
+        <img src="{{ url_for('static', filename='screen1.png') }}" alt="Upload your documents" />
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Professional translation and review</h3>
+        <p>A professional translator will carefully translate your document. You can review and request changes.</p>
+        <img src="{{ url_for('static', filename='screen2.png') }}" alt="Translator working" />
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Receive your translation</h3>
+        <p>You’ll receive the final translation along with certification, if selected.</p>
+        <img src="{{ url_for('static', filename='screen3.png') }}" alt="Download translation" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ✅ JS: Mobile Menu Toggle -->
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById("navMenu").classList.toggle("active");
+    }
+  </script>
+
+</body>
+</html>

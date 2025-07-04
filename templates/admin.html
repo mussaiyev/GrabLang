@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - All Orders</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 40px;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 0;
+    }
+    .logout {
+      font-size: 14px;
+      color: #007bff;
+      text-decoration: none;
+      margin-left: 8px;
+    }
+    .logout:hover {
+      text-decoration: underline;
+    }
+    .actions {
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 8px 14px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+    .btn:hover {
+      background: #b02a37;
+    }
+    .back-btn {
+      background: #007bff;
+    }
+    .back-btn:hover {
+      background: #0056b3;
+    }
+    #searchInput {
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    .no-orders {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 18px;
+      color: #777;
+    }
+    .file-link {
+      display: block;
+      color: #007bff;
+      text-decoration: none;
+    }
+    .file-link:hover {
+      text-decoration: underline;
+    }
+    .status-btn, .delete-btn {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+    .status-btn {
+      background-color: #ffc107;
+      color: #000;
+    }
+    .delete-btn {
+      background-color: #e3342f;
+      color: white;
+    }
+  </style>
+  <script>
+    function filterOrders() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toLowerCase();
+      const rows = document.querySelectorAll('tbody tr');
+
+      rows.forEach(row => {
+        const email = row.children[2].textContent.toLowerCase();
+        const language = row.children[3].textContent.toLowerCase();
+        row.style.display = (email.includes(filter) || language.includes(filter)) ? '' : 'none';
+      });
+    }
+  </script>
+</head>
+<body>
+
+  <div class="top-bar">
+    <h1>📋 All Orders</h1>
+    <div>
+      <span>Welcome, Admin</span> |
+      <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </div>
+  </div>
+
+  <div class="actions">
+    <form method="POST" action="{{ url_for('clear_orders') }}" style="display:inline;">
+      <button class="btn" onclick="return confirm('Are you sure you want to clear all orders?')">Clear Orders</button>
+    </form>
+    <a href="{{ url_for('home') }}" class="btn back-btn">← Back to Home</a>
+  </div>
+
+  <input type="text" id="searchInput" onkeyup="filterOrders()" placeholder="Search by email or language...">
+
+  {% if orders %}
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Language</th>
+          <th>Pages</th>
+          <th>Addons</th>
+          <th>Total</th>
+          <th>Date</th>
+          <th>Files</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ order.name }}</td>
+          <td>{{ order.email }}</td>
+          <td>{{ order.source_lang }} → {{ order.target_lang }}</td>
+          <td>{{ order.pages }}</td>
+          <td>{{ order.addons }}</td>
+          <td>{{ order.total }}</td>
+          <td>{{ order.date }}</td>
+          <td>
+            {% if order.files %}
+              {% for file in order.files %}
+                <a class="file-link" href="{{ url_for('uploaded_file', filename=file) }}" target="_blank">{{ file }}</a>
+              {% endfor %}
+            {% else %}
+              No files
+            {% endif %}
+          </td>
+          <td>
+            <form action="{{ url_for('delete_order', index=loop.index0) }}" method="POST" onsubmit="return confirm('Delete this order?');">
+              <button class="delete-btn" type="submit">Delete</button>
+            </form>
+            <form action="{{ url_for('resend_status_email', index=loop.index0) }}" method="POST">
+              <button class="status-btn" type="submit">Status Update</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="no-orders">No orders yet.</p>
+  {% endif %}
+
+</body>
+</html>

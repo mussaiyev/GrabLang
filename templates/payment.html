@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='payment.css') }}">
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="left-panel">
+      <h1>Review and finalize your order</h1>
+
+      <form id="orderForm">
+        <!-- Hidden fields -->
+        <input type="hidden" id="hiddenSourceLang">
+        <input type="hidden" id="hiddenTargetLang">
+        <input type="hidden" id="hiddenPageCount">
+        <input type="hidden" id="hiddenAddons">
+        <input type="hidden" id="hiddenTotal">
+
+        <!-- Contact -->
+        <div class="section">
+          <h2>Contact Information</h2>
+          <input type="text" id="fullName" placeholder="Full Name" required />
+          <input type="email" id="email" placeholder="Email Address" required />
+        </div>
+
+        <!-- Card Section -->
+        <div class="section">
+          <h2>Payment Details</h2>
+          <div id="card-icons">
+            <img src="https://img.icons8.com/color/48/visa.png" alt="Visa" />
+            <img src="https://img.icons8.com/color/48/mastercard-logo.png" alt="Mastercard" />
+            <img src="https://img.icons8.com/color/48/amex.png" alt="Amex" />
+          </div>
+          <div class="stripe-group"><label>Card Number</label><div id="card-number" class="StripeElement"></div></div>
+          <div class="stripe-group"><label>Expiry Date</label><div id="card-expiry" class="StripeElement"></div></div>
+          <div class="stripe-group"><label>CVC</label><div id="card-cvc" class="StripeElement"></div></div>
+          <div id="card-errors" role="alert" class="card-errors"></div>
+        </div>
+
+        <button type="submit" class="submit-btn">Pay Now</button>
+      </form>
+    </div>
+
+    <div class="right-panel">
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <p>Certified Translation</p>
+        <p id="langSummary">Language</p>
+        <p id="pageSummary">Pages</p>
+        <div id="addonsList"></div>
+        <h2 id="totalCost">$0.00</h2>
+        <p id="turnaround">24 hours</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const stripe = Stripe("pk_test_51RgnFNQjoDGMaAOtiGpPIlenC69flVmNN3Y8b3rRWKAuDiSemr2oTOZcaVnc5bjMXRwIZ0SpbYFiuX9fHME6RFaR00N6u7UZ4C");
+    const elements = stripe.elements();
+    const style = { base: { fontSize: '16px', color: '#32325d', '::placeholder': { color: '#888' } } };
+
+    const cardNumber = elements.create('cardNumber', { style });
+    const cardExpiry = elements.create('cardExpiry', { style });
+    const cardCvc = elements.create('cardCvc', { style });
+
+    cardNumber.mount('#card-number');
+    cardExpiry.mount('#card-expiry');
+    cardCvc.mount('#card-cvc');
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const source = localStorage.getItem("sourceLanguage") || "Unknown";
+      const target = localStorage.getItem("targetLanguage") || "English";
+      const pages = localStorage.getItem("pageCount") || "0";
+      const total = localStorage.getItem("finalTotal") || "0.00";
+      const turnaround = localStorage.getItem("finalTurnaround") || "24 hours";
+      const addons = JSON.parse(localStorage.getItem("finalAddons") || "[]");
+
+      document.getElementById("langSummary").textContent = `${source} to ${target}`;
+      document.getElementById("pageSummary").textContent = `${pages} page${pages !== "1" ? "s" : ""}`;
+      document.getElementById("totalCost").textContent = `$${total}`;
+      document.getElementById("turnaround").textContent = turnaround;
+
+      document.getElementById("hiddenSourceLang").value = source;
+      document.getElementById("hiddenTargetLang").value = target;
+      document.getElementById("hiddenPageCount").value = pages;
+      document.getElementById("hiddenAddons").value = addons.join(", ");
+      document.getElementById("hiddenTotal").value = `$${total}`;
+
+      const addonsList = document.getElementById("addonsList");
+      addonsList.innerHTML = "";
+      addons.forEach(service => {
+        const p = document.createElement("p");
+        p.textContent = service;
+        addonsList.appendChild(p);
+      });
+    });
+
+    document.getElementById("orderForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const total = document.getElementById("hiddenTotal").value.replace('$', '');
+
+      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!isValidEmail || name.length < 2) {
+        alert("Please enter valid contact information.");
+        return;
+      }
+
+      const response = await fetch("/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: parseFloat(total) * 100 })
+      });
+
+      const { clientSecret } = await response.json();
+
+      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardNumber,
+          billing_details: { name, email }
+        }
+      });
+
+      if (error) {
+        document.getElementById("card-errors").textContent = error.message;
+      } else if (paymentIntent.status === "succeeded") {
+        const formData = {
+          fullName: name,
+          email: email,
+          sourceLang: document.getElementById("hiddenSourceLang").value,
+          targetLang: document.getElementById("hiddenTargetLang").value,
+          pageCount: document.getElementById("hiddenPageCount").value,
+          addons: document.getElementById("hiddenAddons").value,
+          total: `$${total}`
+        };
+
+        await fetch("/finalize-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        window.location.href = "/success";
+      }
+    });
+  </script>
+</body>
+</html>

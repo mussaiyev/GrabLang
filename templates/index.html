@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certified Translation Order</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="left-panel">
+      <h1>Start your translation order</h1>
+
+      <!-- Translation Type -->
+      <div class="translation-type">
+        <h2>Translation type</h2>
+        <div class="option-box selected">
+          <input type="radio" checked />
+          <div>
+            <strong>Certified Translation</strong>
+            <p>Word-for-word document translation with certification letter for official use.</p>
+          </div>
+          <span class="price-label">$24.95/page</span>
+        </div>
+      </div>
+
+      <!-- Language Selection -->
+      <div class="language-section">
+        <h2>Languages</h2>
+        <label for="sourceLanguage">Source Language:</label>
+        <select id="sourceLanguage" required>
+          <option value="">Select source language</option>
+          <option>Arabic</option>
+          <option>Russian</option>
+          <option>Spanish</option>
+          <option>French</option>
+        </select>
+
+        <label for="targetLanguage">Target Language:</label>
+        <select id="targetLanguage">
+          <option value="English" selected>English</option>
+        </select>
+      </div>
+
+      <!-- Document Upload -->
+      <div class="upload-section">
+        <h2>Documents</h2>
+        <p>Upload your files to see pricing and estimated turnaround time.</p>
+        <div class="upload-box" onclick="document.getElementById('documentUpload').click()">
+          <span>Drag and drop or <strong>browse files</strong></span>
+          <input type="file" id="documentUpload" multiple hidden required>
+        </div>
+        <ul id="fileList" class="file-list"></ul>
+      </div>
+
+      <!-- Page count -->
+      <div class="page-count-section">
+        <label for="pageCount">Number of pages:</label>
+        <input type="number" id="pageCount" value="1" min="1" readonly />
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <p>Certified Translation</p>
+        <p id="selectedLanguages">No languages selected</p>
+        <p id="pageSummary">0 pages</p>
+        <h2 id="totalCost">$0.00</h2>
+        <p class="note">Upload files for pricing and turnaround</p>
+      </div>
+      <div class="security-note">
+        <p>Prices are listed in U.S. dollars (USD)</p>
+        <p>🔐 Private & Secure</p>
+        <p>All uploaded files are encrypted and accessible only by authorized staff.</p>
+      </div>
+      <button class="continue-btn" onclick="submitAndContinue()">Continue to options →</button>
+    </div>
+  </div>
+
+  <script>
+    const sourceLanguage = document.getElementById("sourceLanguage");
+    const pageCountEl = document.getElementById("pageCount");
+    const totalCostEl = document.getElementById("totalCost");
+    const selectedLanguages = document.getElementById("selectedLanguages");
+    const pageSummary = document.getElementById("pageSummary");
+    const documentUpload = document.getElementById("documentUpload");
+    const fileListEl = document.getElementById("fileList");
+
+    sourceLanguage.addEventListener("change", () => {
+      selectedLanguages.textContent = `${sourceLanguage.value} → English`;
+    });
+
+    documentUpload.addEventListener("change", async () => {
+      const files = Array.from(documentUpload.files);
+      fileListEl.innerHTML = "";
+      let totalPages = 0;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const li = document.createElement("li");
+        li.className = "file-item";
+
+        const num = document.createElement("span");
+        num.className = "file-number";
+        num.textContent = `${i + 1}.`;
+
+        const link = document.createElement("span");
+        link.className = "file-link";
+        link.textContent = file.name;
+
+        li.appendChild(num);
+        li.appendChild(link);
+        fileListEl.appendChild(li);
+
+        if (file.type === "application/pdf") {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          totalPages += pdf.numPages;
+        } else {
+          totalPages += 1;
+        }
+      }
+
+      pageCountEl.value = totalPages;
+      pageSummary.textContent = `${totalPages} page${totalPages !== 1 ? "s" : ""}`;
+      totalCostEl.textContent = `$${(totalPages * 24.95).toFixed(2)}`;
+    });
+
+    async function submitAndContinue() {
+      const files = documentUpload.files;
+      const sourceLang = sourceLanguage.value;
+      const targetLang = document.getElementById("targetLanguage").value;
+      const pages = pageCountEl.value;
+      const total = totalCostEl.textContent;
+
+      if (!sourceLang || files.length === 0) {
+        alert("Please select a source language and upload at least one document.");
+        return;
+      }
+
+      const formData = new FormData();
+      for (const file of files) {
+        formData.append("documents", file);
+      }
+
+      try {
+        const res = await fetch("/upload", { method: "POST", body: formData });
+        const data = await res.json();
+
+        if (data.status === "ok") {
+          localStorage.setItem("sourceLanguage", sourceLang);
+          localStorage.setItem("targetLanguage", targetLang);
+          localStorage.setItem("pageCount", pages);
+          localStorage.setItem("totalCost", total);
+          localStorage.setItem("uploadedFileNames", JSON.stringify(data.files));
+          window.location.href = "/options";
+        } else {
+          alert("Upload failed.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Upload failed.");
+      }
+    }
+  </script>
+</body>
+</html>

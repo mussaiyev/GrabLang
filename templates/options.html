@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optional Services</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='options.css') }}">
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <!-- Left (Form) -->
+    <form action="/options" method="POST" id="optionsForm" class="form-panel">
+      <h1>Choose optional services</h1>
+      <p class="subtitle">Customize your translation to fit your needs.</p>
+
+      <!-- Certification -->
+      <section class="section">
+        <h2>Certification options</h2>
+        <label class="option-box">
+          <input type="checkbox" id="notarization" onchange="updateSummary()" />
+          <div class="option-details">
+            <strong>Notarization</strong>
+            <p>Official certification with notary stamp and signature.</p>
+          </div>
+          <span class="price-label">+$19.95</span>
+        </label>
+      </section>
+
+      <!-- Delivery -->
+      <section class="section">
+        <h2>Delivery options</h2>
+        <label class="option-box">
+          <input type="checkbox" id="expedited" onchange="updateSummary()" />
+          <div class="option-details">
+            <strong>Expedited Turnaround</strong>
+            <p>Priority handling — 50% faster delivery.</p>
+          </div>
+          <span class="price-label">+14.95/page</span>
+        </label>
+      </section>
+
+      <!-- Notes -->
+      <section class="section">
+        <h2>Special instructions</h2>
+        <textarea id="notes" name="notes" placeholder="Add notes..."></textarea>
+      </section>
+
+      <!-- Hidden fields -->
+      <input type="hidden" name="addons" id="hiddenAddons" />
+      <input type="hidden" name="total" id="hiddenTotal" />
+    </form>
+
+    <!-- Right (Summary) -->
+    <aside class="right-panel">
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <p>Certified Translation</p>
+        <p id="languageSummary">Language Pair</p>
+        <p id="pageSummary">0 pages</p>
+        <div id="addOnsList"></div>
+        <h2 id="totalCost">$0.00</h2>
+        <p class="note">Estimated turnaround: <span id="turnaround">3–4 days</span></p>
+      </div>
+
+      <div class="security-note">
+        <p>Prices are in USD</p>
+        <p>🔒 All data is securely encrypted.</p>
+      </div>
+
+      <button type="submit" form="optionsForm" class="continue-btn" onclick="beforeSubmit()">Continue to payment →</button>
+    </aside>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='options.js') }}"></script>
+</body>
+</html>
