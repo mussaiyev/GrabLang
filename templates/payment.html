@@ -118,14 +118,21 @@
         body: JSON.stringify({ amount: parseFloat(total) * 100 })
       });
 
-      const { clientSecret } = await response.json();
+      const result = await response.json();
 
-      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: cardNumber,
-          billing_details: { name, email }
+        if (result.error || !result.clientSecret) {
+          document.getElementById("card-errors").textContent =
+            result.error || "Payment could not be initiated.";
+          return;
         }
-      });
+
+        const { error, paymentIntent } = await stripe.confirmCardPayment(result.clientSecret, {
+          payment_method: {
+            card: cardNumber,
+            billing_details: { name, email }
+          }
+        });
+
 
       if (error) {
         document.getElementById("card-errors").textContent = error.message;
