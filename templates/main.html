@@ -28,8 +28,8 @@
           </a>
         </div>
       </li>
-      <li><a href="#">Pricing</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="#pricing">Pricing</a></li> <!-- ✅ Updated -->
+      <li><a href="#contact">Contact</a></li> <!-- ✅ Updated -->
       <li><a href="{{ url_for('index') }}" class="order-now">Order Now</a></li>
     </ul>
   </nav>
@@ -48,7 +48,7 @@
   </section>
 
   <!-- ✅ Translation Info Section -->
-  <section class="translation-section">
+  <section class="translation-section" id="pricing"> <!-- ✅ Added ID -->
     <div class="translation-container">
       <h2>High-quality translations.<br><span class="sub">Fast, reliable results.</span></h2>
       <p class="description">
@@ -105,6 +105,18 @@
         <p>You’ll receive the final translation along with certification, if selected.</p>
         <img src="{{ url_for('static', filename='screen3.png') }}" alt="Download translation" />
       </div>
+    </div>
+  </section>
+
+  <!-- ✅ Contact Section -->
+  <section id="contact" class="contact-section">
+    <h2>Contact Us</h2>
+    <p>Need help or have a question? We’d love to hear from you.</p>
+    <div class="contact-details">
+      <p><strong>Email:</strong> support@grablang.com</p>
+      <p><strong>Phone:</strong> +1 (800) 123-4567</p>
+      <p><strong>Address:</strong> 123 Translation Ave, New York, NY 10001</p>
+      <p><strong>Hours:</strong> Mon-Fri, 9:00–17:00 EST</p>
     </div>
   </section>
 
