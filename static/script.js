@@ -4,7 +4,7 @@ function setTargetToEnglish() {
 
 function calculateTotal() {
   const pageCount = parseInt(document.getElementById('pageCount').value) || 0;
-  const total = (pageCount * 24.95).toFixed(2);
+  const total = (pageCount * 1.95).toFixed(2);
 
   document.getElementById('totalCost').innerText = `$${total}`;
   document.getElementById('pageSummary').innerText = `${pageCount} page${pageCount !== 1 ? 's' : ''}`;

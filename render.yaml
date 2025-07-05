@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: grablang
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        value: your-secret-key
+      - key: MAIL_USERNAME
+        value: grablang.com@gmail.com
+      - key: MAIL_PASSWORD
+        value: emhlhwpppjeekudf
+      - key: STRIPE_SECRET_KEY
+        value: sk_test_...
+      - key: TELEGRAM_TOKEN
+        value: 7837185661:AAFO-PwRPIpRYhyb22Y8fXQQvCSr9ZkvU44
+      - key: TELEGRAM_CHAT_ID
+        value: 601234567
