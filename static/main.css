@@ -398,6 +398,7 @@ body {
     border: 1px solid #eee;
   }
 
+
   .hero-text h1 {
     font-size: 30px;
   }
@@ -423,37 +424,39 @@ body {
     max-width: 100%;
   }
 }
-
-/* ========= Contact Section (добавлено) ========= */
 .contact-section {
   background-color: #f4f4f4;
   padding: 80px 20px;
   text-align: center;
-  border-top: 1px solid #ddd;
 }
 
-.contact-container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.contact-info h2 {
-  font-size: 28px;
-  margin-bottom: 20px;
+.contact-section h2 {
+  font-size: 32px;
+  margin-bottom: 12px;
   color: #222;
 }
 
-.contact-info p {
+.contact-section p {
   font-size: 16px;
   color: #555;
-  margin: 10px 0;
+  margin: 8px 0;
 }
 
-.contact-info a {
+.contact-details {
+  margin-top: 30px;
+  line-height: 1.8;
+  font-size: 16px;
+  color: #444;
+}
+
+.contact-details a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.contact-details a:hover {
   color: #007BFF;
   text-decoration: none;
-}
-
-.contact-info a:hover {
-  text-decoration: underline;
 }
