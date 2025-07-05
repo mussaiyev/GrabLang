@@ -123,10 +123,13 @@ def options():
 
 @app.route('/payment')
 def payment():
-    return render_template('payment.html', total=session.get('total', '0.00'),
+    return render_template('payment.html',
+                           total=session.get('total', '0.00'),
                            pages=session.get('page_count', ''),
                            source_lang=session.get('source_lang', ''),
-                           target_lang=session.get('target_lang', ''))
+                           target_lang=session.get('target_lang', ''),
+                           STRIPE_PUBLISHABLE_KEY=os.getenv('STRIPE_PUBLISHABLE_KEY'))
+
 
 @app.route('/success')
 def success():

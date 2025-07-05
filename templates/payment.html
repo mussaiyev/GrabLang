@@ -13,21 +13,18 @@
       <h1>Review and finalize your order</h1>
 
       <form id="orderForm">
-        <!-- Hidden fields -->
         <input type="hidden" id="hiddenSourceLang">
         <input type="hidden" id="hiddenTargetLang">
         <input type="hidden" id="hiddenPageCount">
         <input type="hidden" id="hiddenAddons">
         <input type="hidden" id="hiddenTotal">
 
-        <!-- Contact -->
         <div class="section">
           <h2>Contact Information</h2>
           <input type="text" id="fullName" placeholder="Full Name" required />
           <input type="email" id="email" placeholder="Email Address" required />
         </div>
 
-        <!-- Card Section -->
         <div class="section">
           <h2>Payment Details</h2>
           <div id="card-icons">
@@ -35,10 +32,11 @@
             <img src="https://img.icons8.com/color/48/mastercard-logo.png" alt="Mastercard" />
             <img src="https://img.icons8.com/color/48/amex.png" alt="Amex" />
           </div>
+
           <div class="stripe-group"><label>Card Number</label><div id="card-number" class="StripeElement"></div></div>
           <div class="stripe-group"><label>Expiry Date</label><div id="card-expiry" class="StripeElement"></div></div>
           <div class="stripe-group"><label>CVC</label><div id="card-cvc" class="StripeElement"></div></div>
-          <div id="card-errors" role="alert" class="card-errors"></div>
+          <div id="card-errors" class="card-errors"></div>
         </div>
 
         <button type="submit" class="submit-btn">Pay Now</button>
@@ -59,7 +57,7 @@
   </div>
 
   <script>
-    const stripe = Stripe("pk_test_51RgnFNQjoDGMaAOtiGpPIlenC69flVmNN3Y8b3rRWKAuDiSemr2oTOZcaVnc5bjMXRwIZ0SpbYFiuX9fHME6RFaR00N6u7UZ4C");
+    const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
     const elements = stripe.elements();
     const style = { base: { fontSize: '16px', color: '#32325d', '::placeholder': { color: '#888' } } };
 
@@ -88,7 +86,7 @@
       document.getElementById("hiddenTargetLang").value = target;
       document.getElementById("hiddenPageCount").value = pages;
       document.getElementById("hiddenAddons").value = addons.join(", ");
-      document.getElementById("hiddenTotal").value = `$${total}`;
+      document.getElementById("hiddenTotal").value = total;
 
       const addonsList = document.getElementById("addonsList");
       addonsList.innerHTML = "";
@@ -120,19 +118,17 @@
 
       const result = await response.json();
 
-        if (result.error || !result.clientSecret) {
-          document.getElementById("card-errors").textContent =
-            result.error || "Payment could not be initiated.";
-          return;
+      if (result.error || !result.clientSecret) {
+        document.getElementById("card-errors").textContent = result.error || "Payment failed to initialize.";
+        return;
+      }
+
+      const { error, paymentIntent } = await stripe.confirmCardPayment(result.clientSecret, {
+        payment_method: {
+          card: cardNumber,
+          billing_details: { name, email }
         }
-
-        const { error, paymentIntent } = await stripe.confirmCardPayment(result.clientSecret, {
-          payment_method: {
-            card: cardNumber,
-            billing_details: { name, email }
-          }
-        });
-
+      });
 
       if (error) {
         document.getElementById("card-errors").textContent = error.message;
