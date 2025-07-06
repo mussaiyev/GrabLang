@@ -276,3 +276,6 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     app.run(debug=True)
+@app.route('/googlee3f9a430098bee6.html')
+def google_verification():
+    return send_from_directory(app.static_folder, 'googlee3f9a430098bee6.html')
