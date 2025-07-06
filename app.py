@@ -130,7 +130,6 @@ def payment():
                            target_lang=session.get('target_lang', ''),
                            STRIPE_PUBLISHABLE_KEY=os.getenv('STRIPE_PUBLISHABLE_KEY'))
 
-
 @app.route('/success')
 def success():
     return render_template('thankyou.html')
@@ -198,9 +197,14 @@ def admin_panel():
             except:
                 orders = []
     month = datetime.now().strftime('%Y-%m')
-    monthly_count = sum(1 for o in orders if o['date'].startswith(month))
-    total_revenue = sum(float(o['total']) for o in orders if 'total' in o)
-    return render_template('admin.html', orders=orders, monthly_count=monthly_count, total_revenue=total_revenue, total_orders=len(orders))
+    monthly_count = sum(1 for o in orders if o.get('date', '').startswith(month))
+    total_revenue = sum(
+        float(o['total'].replace('$', '').strip())
+        for o in orders
+        if 'total' in o and o['total'].replace('$', '').replace('.', '').isdigit()
+    )
+    return render_template('admin.html', orders=orders, monthly_count=monthly_count,
+                           total_revenue=total_revenue, total_orders=len(orders))
 
 @app.route('/clear_orders', methods=['POST'])
 @login_required
