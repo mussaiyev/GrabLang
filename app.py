@@ -276,3 +276,8 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     app.run(debug=True)
+from flask import send_file
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_file('sitemap.xml', mimetype='application/xml')
