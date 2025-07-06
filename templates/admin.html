@@ -117,8 +117,8 @@
       const rows = document.querySelectorAll('tbody tr');
 
       rows.forEach(row => {
-        const email = row.children[2].textContent.toLowerCase();
-        const language = row.children[3].textContent.toLowerCase();
+        const email = row.children[2]?.textContent.toLowerCase() || '';
+        const language = row.children[3]?.textContent.toLowerCase() || '';
         row.style.display = (email.includes(filter) || language.includes(filter)) ? '' : 'none';
       });
     }
@@ -166,12 +166,12 @@
           <td>{{ order.name or '—' }}</td>
           <td>{{ order.email or '—' }}</td>
           <td>{{ order.source_lang or '—' }} → {{ order.target_lang or '—' }}</td>
-          <td>{{ order.pages or '—' }}</td>
+          <td>{{ order.pages or '0' }}</td>
           <td>{{ order.addons or '—' }}</td>
           <td>{{ order.total or '$0.00' }}</td>
           <td>{{ order.date or '—' }}</td>
           <td>
-            {% if order.files %}
+            {% if order.files and order.files|length > 0 %}
               {% for file in order.files %}
                 <a class="file-link" href="{{ url_for('uploaded_file', filename=file) }}" target="_blank">{{ file }}</a>
               {% endfor %}
