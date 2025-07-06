@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, jsonify, send_file
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
 import os
@@ -274,10 +274,9 @@ def logout():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-if __name__ == '__main__':
-    app.run(debug=True)
-from flask import send_file
-
 @app.route('/sitemap.xml')
 def sitemap():
     return send_file('sitemap.xml', mimetype='application/xml')
+
+if __name__ == '__main__':
+    app.run(debug=True)
