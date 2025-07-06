@@ -47,6 +47,11 @@ def login_required(f):
         return f(*args, **kwargs)
     return wrapped
 
+# ✅ Google Search Console verification route
+@app.route('/googlee3f9a430098bee6.html')
+def google_verification():
+    return app.send_static_file('googlee3f9a430098bee6.html')
+
 def send_admin_email(order):
     msg = Message("\U0001F4C4 Новый заказ перевода", recipients=[app.config['MAIL_USERNAME']])
     msg.body = f"""
@@ -197,14 +202,9 @@ def admin_panel():
             except:
                 orders = []
     month = datetime.now().strftime('%Y-%m')
-    monthly_count = sum(1 for o in orders if o.get('date', '').startswith(month))
-    total_revenue = sum(
-        float(o['total'].replace('$', '').strip())
-        for o in orders
-        if 'total' in o and o['total'].replace('$', '').replace('.', '').isdigit()
-    )
-    return render_template('admin.html', orders=orders, monthly_count=monthly_count,
-                           total_revenue=total_revenue, total_orders=len(orders))
+    monthly_count = sum(1 for o in orders if o['date'].startswith(month))
+    total_revenue = sum(float(o['total'].replace('$', '')) for o in orders if 'total' in o and o['total'])
+    return render_template('admin.html', orders=orders, monthly_count=monthly_count, total_revenue=total_revenue, total_orders=len(orders))
 
 @app.route('/clear_orders', methods=['POST'])
 @login_required
@@ -276,6 +276,3 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     app.run(debug=True)
-@app.route('/google12345678abcdef.html')  # заменяешь именем файла
-def google_verification():
-    return app.send_static_file('google12345678abcdef.html')
