@@ -28,9 +28,9 @@ function updateSummary() {
     total += expeditedFeePerPage * pages;
     addons.push("Expedited Turnaround");
     addOnsList.innerHTML += `<p>✔ Expedited Turnaround</p>`;
-    turnaround.textContent = "12–24 hours";
+    turnaround.textContent = "6–12 hours";
   } else {
-    turnaround.textContent = "3–4 days";
+    turnaround.textContent = "1–2 days";
   }
 
   document.getElementById("totalCost").textContent = `$${total.toFixed(2)}`;
