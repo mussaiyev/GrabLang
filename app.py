@@ -276,3 +276,6 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     app.run(debug=True)
+@app.route('/google12345678abcdef.html')  # заменяешь именем файла
+def google_verification():
+    return app.send_static_file('google12345678abcdef.html')
