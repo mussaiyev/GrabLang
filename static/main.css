@@ -729,12 +729,6 @@ section:hover {
 
 
 
-.trust-wrapper {
-  width: 100%;
-  text-align: center;
-  margin-top: 20px;
-}
-
 @media (max-width: 768px) {
   .hero-text {
     text-align: left;
