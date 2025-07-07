@@ -573,3 +573,43 @@ body, h1, h2, h3, p, a, li {
   font-family: 'Poppins', sans-serif;
   letter-spacing: 0.2px;
 }
+
+
+
+/* === Ocean-Inspired Gradient Background === */
+body {
+  background: linear-gradient(135deg, #e0f7ff, #ffffff);
+}
+
+/* Carousel style upgrade */
+.testimonial-carousel {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  padding: 20px 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.testimonial-carousel::-webkit-scrollbar {
+  display: none;
+}
+.testimonial {
+  min-width: 300px;
+  scroll-snap-align: center;
+  background: #fefefe;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 123, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+.testimonial:hover {
+  transform: scale(1.03);
+}
+.testimonial span {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
