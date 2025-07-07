@@ -267,7 +267,7 @@ body {
 .card-description {
   margin: 20px 0 30px;
   font-size: 16px;
-  color: #ccc;
+  color: white;
 }
 
 .card-buttons {
@@ -277,7 +277,7 @@ body {
 .card-features {
   list-style: none;
   padding-left: 0;
-  color: #ccc;
+  color: white;
 }
 
 .card-features li {
