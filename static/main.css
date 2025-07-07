@@ -727,15 +727,3 @@ section:hover {
   transform: scale(1.15);
 }
 
-
-
-@media (max-width: 768px) {
-  .hero-text {
-    text-align: left;
-  }
-
-  .trust-badges {
-    justify-content: center !important;
-    text-align: center;
-  }
-}
