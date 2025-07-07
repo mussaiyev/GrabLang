@@ -30,7 +30,7 @@
 
   <!-- ✅ Favicon & CSS -->
   <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
-  <link rel="stylesheet" href="main_ultra_final_updated.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
 <body>
 
@@ -63,12 +63,10 @@
   <!-- ✅ Hero Section -->
   <section class="hero">
     <div class="hero-text">
-      <h1>Online translation services <span class="highlight">you can count on</span></h1>
-      <p>Get certified translations starting at just $24.95 per page. Delivered in 24 hours. Simple. Fast. Reliable.</p>
+      <h1><span class="highlight">Certified Translations</span> You Can Trust</h1>
+      <p>Certified translations accepted by USCIS. Fast. Reliable. Delivered within 24 hours. Starting from $24.95/page.</p>
       <a href="{{ url_for('index') }}" class="cta-button">Start Your Order</a>
 <div class="trust-badges">
-  <img src="https://cdn-icons-png.flaticon.com/512/535/535137.png" alt="USCIS Approved">
-  <img src="https://cdn-icons-png.flaticon.com/512/535/535234.png" alt="ATA Certified">
   <span>Certified • Secure • 100% Acceptance Guarantee</span>
 </div>
 
@@ -102,8 +100,6 @@
       <div class="card-buttons">
         <a href="{{ url_for('index') }}" class="cta-button">Start Your Order</a>
 <div class="trust-badges">
-  <img src="https://cdn-icons-png.flaticon.com/512/535/535137.png" alt="USCIS Approved">
-  <img src="https://cdn-icons-png.flaticon.com/512/535/535234.png" alt="ATA Certified">
   <span>Certified • Secure • 100% Acceptance Guarantee</span>
 </div>
 
@@ -179,6 +175,9 @@
 <section class="testimonials">
   <h2>What Our Clients Say</h2>
   <div class="testimonial-carousel">
+    <div class="testimonial">"GrabLang made the process stress-free. The translator was fast, and the documents looked official." <span>— Monica H., California</span></div>
+    <div class="testimonial">"I received my certified translations within 8 hours. Outstanding quality and customer support!" <span>— Kevin T., New Jersey</span></div>
+
     <div class="testimonial">"I submitted my birth certificate and got a certified translation the same day. Incredible speed and accuracy!" <span>– Maria L., Florida</span></div>
     <div class="testimonial">"GrabLang’s team was extremely responsive and professional. Highly recommended for immigration docs." <span>– Ahmed B., Texas</span></div>
     <div class="testimonial">"Fast, detailed, and they handled USCIS formatting perfectly. Will use again." <span>– Sofia K., California</span></div>
@@ -190,9 +189,8 @@
 <section class="social-contact">
   <h2>Connect With Us</h2>
   <div class="social-icons">
-    <a href="https://wa.me/12074004502" target="_blank">📱 WhatsApp</a>
-    <a href="https://t.me/GrabLangSupport" target="_blank">💬 Telegram</a>
-    <a href="mailto:support@grablang.com">✉️ Email</a>
+    <a href="https://t.me/mussaiyev" target="_blank">💬 Telegram</a>
+    <a href="mailto:grablang.com@gmail.com">✉️ Email</a>
   </div>
 </section>
 

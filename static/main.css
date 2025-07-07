@@ -1,9 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 /* ========= Global ========= */
-
 html {
-  max-width: 100%;
-  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
@@ -183,6 +180,8 @@ body {
 .hero-images {
   flex: 1 1 350px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .hero-images img {
@@ -229,6 +228,8 @@ body {
   background-color: #f9f9f9;
   padding: 80px 20px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .translation-section h2 {
@@ -290,6 +291,8 @@ body {
   padding: 80px 30px;
   background-color: #fff;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .steps {
@@ -324,6 +327,8 @@ body {
   color: white;
   border-radius: 50%;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
   line-height: 32px;
   font-weight: bold;
   margin-bottom: 15px;
@@ -353,6 +358,8 @@ body {
   color: #eee;
   padding: 40px 20px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .footer a {
@@ -393,6 +400,8 @@ body {
   .nav-links li {
     width: 100%;
     text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
   }
 
   .dropdown-content {
@@ -409,6 +418,8 @@ body {
 
   .hero-text {
     text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
   }
 
   .hero-images img {
@@ -432,6 +443,8 @@ body {
   background-color: #f4f4f4;
   padding: 80px 20px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .contact-section h2 {
@@ -486,6 +499,8 @@ body {
   padding: 60px 20px;
   background-color: #fff;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 .testimonial-slider {
   display: flex;
@@ -511,6 +526,8 @@ body {
 .social-contact {
   padding: 60px 20px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
   background: #fff;
 }
 .social-icons {
@@ -559,6 +576,8 @@ body {
   max-width: 720px;
   margin: 0 auto;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 /* === Smooth fade-up animation for sections === */
@@ -581,7 +600,7 @@ body, h1, h2, h3, p, a, li {
 
 /* === Ocean-Inspired Gradient Background === */
 body {
-  background: linear-gradient(135deg, #e0f7ff, #ffffff);
+  background: linear-gradient(135deg, #b3e0f2, #f5faff);
 }
 
 /* Carousel style upgrade */
@@ -616,115 +635,3 @@ body {
   color: #555;
   font-weight: 500;
 }
-
-
-/* === Dark Mode Support === */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: linear-gradient(135deg, #1c1c1c, #2a2a2a);
-    color: #f2f2f2;
-  }
-  .navbar,
-  .translation-section,
-  .how-it-works,
-  .contact-section,
-  .testimonials,
-  .social-contact {
-    background: rgba(30, 30, 30, 0.95);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  }
-  .nav-links a,
-  .logo,
-  .card-description,
-  .card-features,
-  .contact-details a {
-    color: #eee !important;
-  }
-  .cta-button,
-  .order-now {
-    background-color: #3399ff;
-    color: #fff;
-  }
-  .cta-button:hover,
-  .order-now:hover {
-    background-color: #0077cc;
-  }
-}
-
-/* === Typography Refinement === */
-body {
-  font-size: 16px;
-  line-height: 1.7;
-  letter-spacing: 0.3px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* === Fluid Typography === */
-h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-}
-h2 {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-}
-p, a, li {
-  font-size: clamp(1rem, 2vw, 1.125rem);
-}
-
-/* === Button Glow Effects === */
-.cta-button,
-.order-now {
-  position: relative;
-  overflow: hidden;
-}
-.cta-button::before,
-.order-now::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.2) 10%, transparent 70%);
-  transform: rotate(45deg);
-  animation: glowMove 6s linear infinite;
-}
-@keyframes glowMove {
-  0% { transform: translate(-50%, -50%) rotate(45deg); }
-  100% { transform: translate(150%, 150%) rotate(45deg); }
-}
-
-/* === Section Hover Animations === */
-section:hover {
-  transition: transform 0.4s ease;
-  transform: translateY(-4px);
-}
-
-/* === More Card Elevation Interactivity === */
-.service-card,
-.translation-card,
-.step {
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-.service-card:hover,
-.translation-card:hover,
-.step:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
-/* === Smooth Image Zoom On Hover === */
-.hero-images img:hover,
-.step img:hover {
-  transform: scale(1.03);
-  transition: transform 0.3s ease-in-out;
-}
-
-/* === Trust Badges Scaling === */
-.trust-badges img {
-  transition: transform 0.3s ease-in-out;
-}
-.trust-badges img:hover {
-  transform: scale(1.15);
-}
-
