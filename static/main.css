@@ -180,6 +180,8 @@ body {
 .hero-images {
   flex: 1 1 350px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .hero-images img {
@@ -226,6 +228,8 @@ body {
   background-color: #f9f9f9;
   padding: 80px 20px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .translation-section h2 {
@@ -287,6 +291,8 @@ body {
   padding: 80px 30px;
   background-color: #fff;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .steps {
@@ -321,6 +327,8 @@ body {
   color: white;
   border-radius: 50%;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
   line-height: 32px;
   font-weight: bold;
   margin-bottom: 15px;
@@ -350,6 +358,8 @@ body {
   color: #eee;
   padding: 40px 20px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .footer a {
@@ -390,6 +400,8 @@ body {
   .nav-links li {
     width: 100%;
     text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
   }
 
   .dropdown-content {
@@ -406,6 +418,8 @@ body {
 
   .hero-text {
     text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
   }
 
   .hero-images img {
@@ -429,6 +443,8 @@ body {
   background-color: #f4f4f4;
   padding: 80px 20px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .contact-section h2 {
@@ -483,6 +499,8 @@ body {
   padding: 60px 20px;
   background-color: #fff;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 .testimonial-slider {
   display: flex;
@@ -508,6 +526,8 @@ body {
 .social-contact {
   padding: 60px 20px;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
   background: #fff;
 }
 .social-icons {
@@ -556,6 +576,8 @@ body {
   max-width: 720px;
   margin: 0 auto;
   text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 /* === Smooth fade-up animation for sections === */
@@ -575,39 +597,41 @@ body, h1, h2, h3, p, a, li {
 }
 
 
-/* === Better Testimonial Scrolling === */
-.testimonial-slider {
-  scroll-behavior: smooth;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-}
-.testimonial-slider::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+
+/* === Ocean-Inspired Gradient Background === */
+body {
+  background: linear-gradient(135deg, #b3e0f2, #f5faff);
 }
 
+/* Carousel style upgrade */
+.testimonial-carousel {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  padding: 20px 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.testimonial-carousel::-webkit-scrollbar {
+  display: none;
+}
 .testimonial {
-  min-width: 320px;
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-  background: #ffffff;
-  color: #222;
+  min-width: 300px;
+  scroll-snap-align: center;
+  background: #fefefe;
   padding: 24px;
-  margin: 0 10px;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-  font-size: 16px;
-  max-width: 360px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 123, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+.testimonial:hover {
+  transform: scale(1.03);
 }
 .testimonial span {
   display: block;
   margin-top: 12px;
   font-size: 14px;
-  color: #666;
-}
-
-/* === Ocean-inspired animated gradient === */
-body {
-  background: linear-gradient(135deg, #d1e9ff, #f8fcff);
-  background-attachment: fixed;
+  color: #555;
+  font-weight: 500;
 }
