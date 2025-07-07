@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 /* ========= Global ========= */
 html {
   scroll-behavior: smooth;
@@ -526,4 +527,49 @@ body {
 }
 .social-icons a:hover {
   background: #d0e3ff;
+}
+
+
+
+/* === Professional Gradient Background === */
+body {
+  background: linear-gradient(to bottom right, #eef3f9, #ffffff);
+}
+
+/* === More subtle, refined shadows and layout === */
+.hero,
+.translation-section,
+.how-it-works,
+.contact-section,
+.testimonials,
+.social-contact {
+  border-radius: 12px;
+  margin: 20px auto;
+  padding: 40px 20px;
+  max-width: 1200px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* === Modern text centering with max-width for balance === */
+.hero-text, .translation-container, .contact-details, .faq-item {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* === Smooth fade-up animation for sections === */
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+section {
+  animation: fadeUp 0.8s ease-in-out;
+}
+
+/* === Fonts and spacing cleanup === */
+body, h1, h2, h3, p, a, li {
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.2px;
 }
