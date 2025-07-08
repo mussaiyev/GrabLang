@@ -82,24 +82,33 @@ def send_telegram_message(order):
 def send_user_email(order, subject="\u2705 Your Translation Order Confirmation", body=None):
     msg = Message(subject, recipients=[order['email']])
     if not body:
+        files_links = ''.join(
+            f'<li><a href="{url_for("uploaded_file", filename=f, _external=True)}">{f}</a></li>'
+            for f in order['files']
+        ) if order['files'] else '<li>No files uploaded</li>'
+
         body = f"""
-Hi {order['name']},
-
-Thank you for your order!
-
-- Source Language: {order['source_lang']}
-- Target Language: {order['target_lang']}
-- Pages: {order['pages']}
-- Add-ons: {order['addons'] or 'None'}
-- Total: {order['total']}
-- Date: {order['date']}
-
-Files:
-{chr(10).join([url_for('uploaded_file', filename=f, _external=True) for f in order['files']]) if order['files'] else 'No files'}
-
--- GrabLang Team
-"""
-    msg.body = body
+        <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+            <h2>✅ Your Translation Order Confirmation</h2>
+            <p>Hi <strong>{order['name']}</strong>,</p>
+            <p>Thank you for your order!</p>
+            <ul>
+                <li><strong>Source Language:</strong> {order['source_lang']}</li>
+                <li><strong>Target Language:</strong> {order['target_lang']}</li>
+                <li><strong>Pages:</strong> {order['pages']}</li>
+                <li><strong>Add-ons:</strong> {order['addons'] or 'None'}</li>
+                <li><strong>Total:</strong> {order['total']}</li>
+                <li><strong>Date:</strong> {order['date']}</li>
+            </ul>
+            <p><strong>Files:</strong></p>
+            <ul>{files_links}</ul>
+            <br>
+            <p>-- <strong>GrabLang Team</strong></p>
+        </body>
+        </html>
+        """
+    msg.html = body
     mail.send(msg)
 
 @app.route('/')
