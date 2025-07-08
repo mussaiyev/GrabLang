@@ -1,4 +1,4 @@
-const basePrice = 0.10;
+const basePrice = 0.50;
 const notarizationFee = 19.95;
 const expeditedFeePerPage = 14.95;
 
