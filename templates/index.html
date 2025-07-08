@@ -32,72 +32,72 @@
         <label for="sourceLanguage">Source Language:</label>
         <select id="sourceLanguage" required>
           <option value="">Select source language</option>
-           <option>Albanian</option>
-              <option>Amharic</option>
-              <option>Arabic</option>
-              <option>Armenian</option>
-              <option>Azerbaijani</option>
-              <option>Bengali</option>
-              <option>Bosnian</option>
-              <option>Bulgarian</option>
-              <option>Burmese</option>
-              <option>Catalan</option>
-              <option>Chinese (Simplified)</option>
-              <option>Chinese (Traditional)</option>
-              <option>Creole (Haitian)</option>
-              <option>Croatian</option>
-              <option>Czech</option>
-              <option>Danish</option>
-              <option>Dari</option>
-              <option>Dutch</option>
-              <option>English</option>
-              <option>Farsi</option>
-              <option>Finnish</option>
-              <option>French</option>
-              <option>French (Canadian)</option>
-              <option>Georgian</option>
-              <option>German</option>
-              <option>Greek</option>
-              <option>Gujarati</option>
-              <option>Hebrew</option>
-              <option>Hindi</option>
-              <option>Hungarian</option>
-              <option>Indonesian</option>
-              <option>Italian</option>
-              <option>Japanese</option>
-              <option>Kannada</option>
-              <option>Korean</option>
-              <option>Latin</option>
-              <option>Latvian</option>
-              <option>Lithuanian</option>
-              <option>Macedonian</option>
-              <option>Malay</option>
-              <option>Marathi</option>
-              <option>Nepali</option>
-              <option>Norwegian</option>
-              <option>Pashto</option>
-              <option>Polish</option>
-              <option>Portuguese (Brazil)</option>
-              <option>Portuguese (Portugal)</option>
-              <option>Punjabi</option>
-              <option>Romanian</option>
-              <option>Russian</option>
-              <option>Serbian</option>
-              <option>Slovak</option>
-              <option>Slovenian</option>
-              <option>Somali</option>
-              <option>Spanish</option>
-              <option>Swahili</option>
-              <option>Swedish</option>
-              <option>Tagalog</option>
-              <option>Tamil</option>
-              <option>Telugu</option>
-              <option>Thai</option>
-              <option>Turkish</option>
-              <option>Ukrainian</option>
-              <option>Urdu</option>
-              <option>Uzbek</option>
-              <option>Vietnamese</option>
+          <option>Albanian</option>
+          <option>Amharic</option>
+          <option>Arabic</option>
+          <option>Armenian</option>
+          <option>Azerbaijani</option>
+          <option>Bengali</option>
+          <option>Bosnian</option>
+          <option>Bulgarian</option>
+          <option>Burmese</option>
+          <option>Catalan</option>
+          <option>Chinese (Simplified)</option>
+          <option>Chinese (Traditional)</option>
+          <option>Creole (Haitian)</option>
+          <option>Croatian</option>
+          <option>Czech</option>
+          <option>Danish</option>
+          <option>Dari</option>
+          <option>Dutch</option>
+          <option>English</option>
+          <option>Farsi</option>
+          <option>Finnish</option>
+          <option>French</option>
+          <option>French (Canadian)</option>
+          <option>Georgian</option>
+          <option>German</option>
+          <option>Greek</option>
+          <option>Gujarati</option>
+          <option>Hebrew</option>
+          <option>Hindi</option>
+          <option>Hungarian</option>
+          <option>Indonesian</option>
+          <option>Italian</option>
+          <option>Japanese</option>
+          <option>Kannada</option>
+          <option>Korean</option>
+          <option>Latin</option>
+          <option>Latvian</option>
+          <option>Lithuanian</option>
+          <option>Macedonian</option>
+          <option>Malay</option>
+          <option>Marathi</option>
+          <option>Nepali</option>
+          <option>Norwegian</option>
+          <option>Pashto</option>
+          <option>Polish</option>
+          <option>Portuguese (Brazil)</option>
+          <option>Portuguese (Portugal)</option>
+          <option>Punjabi</option>
+          <option>Romanian</option>
+          <option>Russian</option>
+          <option>Serbian</option>
+          <option>Slovak</option>
+          <option>Slovenian</option>
+          <option>Somali</option>
+          <option>Spanish</option>
+          <option>Swahili</option>
+          <option>Swedish</option>
+          <option>Tagalog</option>
+          <option>Tamil</option>
+          <option>Telugu</option>
+          <option>Thai</option>
+          <option>Turkish</option>
+          <option>Ukrainian</option>
+          <option>Urdu</option>
+          <option>Uzbek</option>
+          <option>Vietnamese</option>
         </select>
 
         <label for="targetLanguage">Target Language:</label>
@@ -152,22 +152,24 @@
     const documentUpload = document.getElementById("documentUpload");
     const fileListEl = document.getElementById("fileList");
 
-    let allFiles = [];
+    let uploadedFiles = [];
 
     sourceLanguage.addEventListener("change", () => {
       selectedLanguages.textContent = `${sourceLanguage.value} → English`;
     });
 
     documentUpload.addEventListener("change", async () => {
-      allFiles = [...allFiles, ...Array.from(documentUpload.files)];
-      updateFileDisplay();
+      const files = Array.from(documentUpload.files);
+      uploadedFiles.push(...files);
+      renderFileList();
     });
 
-    function updateFileDisplay() {
+    async function renderFileList() {
       fileListEl.innerHTML = "";
       let totalPages = 0;
 
-      allFiles.forEach((file, i) => {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        const file = uploadedFiles[i];
         const li = document.createElement("li");
         li.className = "file-item";
 
@@ -175,25 +177,30 @@
         num.className = "file-number";
         num.textContent = `${i + 1}.`;
 
-        const name = document.createElement("span");
-        name.className = "file-link";
-        name.textContent = file.name;
+        const link = document.createElement("span");
+        link.className = "file-link";
+        link.textContent = file.name;
 
-        const delBtn = document.createElement("button");
-        delBtn.textContent = "Remove";
-        delBtn.className = "delete-file";
-        delBtn.onclick = () => {
-          allFiles.splice(i, 1);
-          updateFileDisplay();
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove";
+        removeBtn.onclick = () => {
+          uploadedFiles.splice(i, 1);
+          renderFileList();
         };
 
         li.appendChild(num);
-        li.appendChild(name);
-        li.appendChild(delBtn);
+        li.appendChild(link);
+        li.appendChild(removeBtn);
         fileListEl.appendChild(li);
 
-        totalPages += file.type === "application/pdf" ? 0 : 1;
-      });
+        if (file.type === "application/pdf") {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          totalPages += pdf.numPages;
+        } else {
+          totalPages += 1;
+        }
+      }
 
       pageCountEl.value = totalPages;
       pageSummary.textContent = `${totalPages} page${totalPages !== 1 ? "s" : ""}`;
@@ -206,13 +213,15 @@
       const pages = pageCountEl.value;
       const total = totalCostEl.textContent;
 
-      if (!sourceLang || allFiles.length === 0) {
+      if (!sourceLang || uploadedFiles.length === 0) {
         alert("Please select a source language and upload at least one document.");
         return;
       }
 
       const formData = new FormData();
-      allFiles.forEach(file => formData.append("documents", file));
+      for (const file of uploadedFiles) {
+        formData.append("documents", file);
+      }
 
       try {
         const res = await fetch("/upload", { method: "POST", body: formData });
