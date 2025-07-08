@@ -153,6 +153,7 @@
   const documentUpload = document.getElementById("documentUpload");
   const fileListEl = document.getElementById("fileList");
   const loadingIndicator = document.getElementById("loadingIndicator");
+  const continueBtn = document.querySelector(".continue-btn");
 
   let uploadedFiles = [];
 
@@ -167,10 +168,9 @@
   });
 
   async function renderFileList() {
+    loadingIndicator.style.display = "block";
     fileListEl.innerHTML = "";
     let totalPages = 0;
-
-    loadingIndicator.style.display = "block"; // ⬅️ Показываем индикатор
 
     for (let i = 0; i < uploadedFiles.length; i++) {
       const file = uploadedFiles[i];
@@ -213,8 +213,7 @@
     pageCountEl.value = totalPages;
     pageSummary.textContent = `${totalPages} page${totalPages !== 1 ? "s" : ""}`;
     totalCostEl.textContent = `$${(totalPages * 24.95).toFixed(2)}`;
-
-    loadingIndicator.style.display = "none"; // ⬅️ Скрываем индикатор
+    loadingIndicator.style.display = "none";
   }
 
   async function submitAndContinue() {
@@ -227,6 +226,10 @@
       alert("Please select a source language and upload at least one document.");
       return;
     }
+
+    loadingIndicator.style.display = "block";
+    continueBtn.disabled = true;
+    continueBtn.textContent = "Uploading...";
 
     const formData = new FormData();
     for (const file of uploadedFiles) {
@@ -251,8 +254,13 @@
       console.error(err);
       alert("Upload failed.");
     }
+
+    loadingIndicator.style.display = "none";
+    continueBtn.disabled = false;
+    continueBtn.textContent = "Continue to options →";
   }
 </script>
+
 
 </body>
 </html>
