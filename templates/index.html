@@ -22,7 +22,7 @@
             <strong>Certified Translation</strong>
             <p>Word-for-word document translation with certification letter for official use.</p>
           </div>
-          <span class="price-label">$0.50/page</span>
+          <span class="price-label">$24.95/page</span>
         </div>
       </div>
 
@@ -152,16 +152,9 @@
   const pageSummary = document.getElementById("pageSummary");
   const documentUpload = document.getElementById("documentUpload");
   const fileListEl = document.getElementById("fileList");
+  const loadingIndicator = document.getElementById("loadingIndicator");
 
-  // New loading indicator
-  const loadingIndicator = document.createElement("p");
-  loadingIndicator.id = "loadingIndicator";
-  loadingIndicator.style.display = "none";
-  loadingIndicator.style.color = "#555";
-  loadingIndicator.style.fontStyle = "italic";
-  loadingIndicator.style.marginTop = "10px";
-  loadingIndicator.textContent = "⏳ Processing files, please wait...";
-  fileListEl.parentNode.insertBefore(loadingIndicator, fileListEl.nextSibling);
+  let uploadedFiles = [];
 
   sourceLanguage.addEventListener("change", () => {
     selectedLanguages.textContent = `${sourceLanguage.value} → English`;
@@ -169,13 +162,18 @@
 
   documentUpload.addEventListener("change", async () => {
     const files = Array.from(documentUpload.files);
+    uploadedFiles.push(...files);
+    await renderFileList();
+  });
+
+  async function renderFileList() {
     fileListEl.innerHTML = "";
     let totalPages = 0;
 
-    loadingIndicator.style.display = "block"; // show loader
+    loadingIndicator.style.display = "block"; // ⬅️ Показываем индикатор
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      const file = uploadedFiles[i];
       const li = document.createElement("li");
       li.className = "file-item";
 
@@ -187,8 +185,16 @@
       link.className = "file-link";
       link.textContent = file.name;
 
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "Remove";
+      removeBtn.onclick = () => {
+        uploadedFiles.splice(i, 1);
+        renderFileList();
+      };
+
       li.appendChild(num);
       li.appendChild(link);
+      li.appendChild(removeBtn);
       fileListEl.appendChild(li);
 
       if (file.type === "application/pdf") {
@@ -196,8 +202,8 @@
           const arrayBuffer = await file.arrayBuffer();
           const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
           totalPages += pdf.numPages;
-        } catch (err) {
-          totalPages += 1; // fallback if PDF reading fails
+        } catch (e) {
+          totalPages += 1;
         }
       } else {
         totalPages += 1;
@@ -206,25 +212,24 @@
 
     pageCountEl.value = totalPages;
     pageSummary.textContent = `${totalPages} page${totalPages !== 1 ? "s" : ""}`;
-    totalCostEl.textContent = `$${(totalPages * 0.50).toFixed(2)}`;
+    totalCostEl.textContent = `$${(totalPages * 24.95).toFixed(2)}`;
 
-    loadingIndicator.style.display = "none"; // hide loader
-  });
+    loadingIndicator.style.display = "none"; // ⬅️ Скрываем индикатор
+  }
 
   async function submitAndContinue() {
-    const files = documentUpload.files;
     const sourceLang = sourceLanguage.value;
     const targetLang = document.getElementById("targetLanguage").value;
     const pages = pageCountEl.value;
     const total = totalCostEl.textContent;
 
-    if (!sourceLang || files.length === 0) {
+    if (!sourceLang || uploadedFiles.length === 0) {
       alert("Please select a source language and upload at least one document.");
       return;
     }
 
     const formData = new FormData();
-    for (const file of files) {
+    for (const file of uploadedFiles) {
       formData.append("documents", file);
     }
 
@@ -248,5 +253,6 @@
     }
   }
 </script>
+
 </body>
 </html>
