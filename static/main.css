@@ -613,6 +613,14 @@ body {
   color: #555;
   font-weight: 500;
 }
+
+
+/* === Dark Mode Support === */
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #f2f2f2;
+  }
+  
   .navbar,
   .translation-section,
   .how-it-works,
