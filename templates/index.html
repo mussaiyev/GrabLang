@@ -115,6 +115,7 @@
           <input type="file" id="documentUpload" multiple hidden required>
         </div>
         <ul id="fileList" class="file-list"></ul>
+        <p id="loadingIndicator" style="display:none; color:#555; font-style:italic; margin-top: 10px;">⏳ Processing files, please wait...</p>
       </div>
 
       <!-- Page count -->
@@ -144,104 +145,108 @@
   </div>
 
   <script>
-    const sourceLanguage = document.getElementById("sourceLanguage");
-    const pageCountEl = document.getElementById("pageCount");
-    const totalCostEl = document.getElementById("totalCost");
-    const selectedLanguages = document.getElementById("selectedLanguages");
-    const pageSummary = document.getElementById("pageSummary");
-    const documentUpload = document.getElementById("documentUpload");
-    const fileListEl = document.getElementById("fileList");
+  const sourceLanguage = document.getElementById("sourceLanguage");
+  const pageCountEl = document.getElementById("pageCount");
+  const totalCostEl = document.getElementById("totalCost");
+  const selectedLanguages = document.getElementById("selectedLanguages");
+  const pageSummary = document.getElementById("pageSummary");
+  const documentUpload = document.getElementById("documentUpload");
+  const fileListEl = document.getElementById("fileList");
 
-    let uploadedFiles = [];
+  // New loading indicator
+  const loadingIndicator = document.createElement("p");
+  loadingIndicator.id = "loadingIndicator";
+  loadingIndicator.style.display = "none";
+  loadingIndicator.style.color = "#555";
+  loadingIndicator.style.fontStyle = "italic";
+  loadingIndicator.style.marginTop = "10px";
+  loadingIndicator.textContent = "⏳ Processing files, please wait...";
+  fileListEl.parentNode.insertBefore(loadingIndicator, fileListEl.nextSibling);
 
-    sourceLanguage.addEventListener("change", () => {
-      selectedLanguages.textContent = `${sourceLanguage.value} → English`;
-    });
+  sourceLanguage.addEventListener("change", () => {
+    selectedLanguages.textContent = `${sourceLanguage.value} → English`;
+  });
 
-    documentUpload.addEventListener("change", async () => {
-      const files = Array.from(documentUpload.files);
-      uploadedFiles.push(...files);
-      renderFileList();
-    });
+  documentUpload.addEventListener("change", async () => {
+    const files = Array.from(documentUpload.files);
+    fileListEl.innerHTML = "";
+    let totalPages = 0;
 
-    async function renderFileList() {
-      fileListEl.innerHTML = "";
-      let totalPages = 0;
+    loadingIndicator.style.display = "block"; // show loader
 
-      for (let i = 0; i < uploadedFiles.length; i++) {
-        const file = uploadedFiles[i];
-        const li = document.createElement("li");
-        li.className = "file-item";
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const li = document.createElement("li");
+      li.className = "file-item";
 
-        const num = document.createElement("span");
-        num.className = "file-number";
-        num.textContent = `${i + 1}.`;
+      const num = document.createElement("span");
+      num.className = "file-number";
+      num.textContent = `${i + 1}.`;
 
-        const link = document.createElement("span");
-        link.className = "file-link";
-        link.textContent = file.name;
+      const link = document.createElement("span");
+      link.className = "file-link";
+      link.textContent = file.name;
 
-        const removeBtn = document.createElement("button");
-        removeBtn.textContent = "Remove";
-        removeBtn.onclick = () => {
-          uploadedFiles.splice(i, 1);
-          renderFileList();
-        };
+      li.appendChild(num);
+      li.appendChild(link);
+      fileListEl.appendChild(li);
 
-        li.appendChild(num);
-        li.appendChild(link);
-        li.appendChild(removeBtn);
-        fileListEl.appendChild(li);
-
-        if (file.type === "application/pdf") {
+      if (file.type === "application/pdf") {
+        try {
           const arrayBuffer = await file.arrayBuffer();
           const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
           totalPages += pdf.numPages;
-        } else {
-          totalPages += 1;
+        } catch (err) {
+          totalPages += 1; // fallback if PDF reading fails
         }
+      } else {
+        totalPages += 1;
       }
-
-      pageCountEl.value = totalPages;
-      pageSummary.textContent = `${totalPages} page${totalPages !== 1 ? "s" : ""}`;
-      totalCostEl.textContent = `$${(totalPages * 24.95).toFixed(2)}`;
     }
 
-    async function submitAndContinue() {
-      const sourceLang = sourceLanguage.value;
-      const targetLang = document.getElementById("targetLanguage").value;
-      const pages = pageCountEl.value;
-      const total = totalCostEl.textContent;
+    pageCountEl.value = totalPages;
+    pageSummary.textContent = `${totalPages} page${totalPages !== 1 ? "s" : ""}`;
+    totalCostEl.textContent = `$${(totalPages * 24.95).toFixed(2)}`;
 
-      if (!sourceLang || uploadedFiles.length === 0) {
-        alert("Please select a source language and upload at least one document.");
-        return;
-      }
+    loadingIndicator.style.display = "none"; // hide loader
+  });
 
-      const formData = new FormData();
-      for (const file of uploadedFiles) {
-        formData.append("documents", file);
-      }
+  async function submitAndContinue() {
+    const files = documentUpload.files;
+    const sourceLang = sourceLanguage.value;
+    const targetLang = document.getElementById("targetLanguage").value;
+    const pages = pageCountEl.value;
+    const total = totalCostEl.textContent;
 
-      try {
-        const res = await fetch("/upload", { method: "POST", body: formData });
-        const data = await res.json();
+    if (!sourceLang || files.length === 0) {
+      alert("Please select a source language and upload at least one document.");
+      return;
+    }
 
-        if (data.status === "ok") {
-          localStorage.setItem("sourceLanguage", sourceLang);
-          localStorage.setItem("targetLanguage", targetLang);
-          localStorage.setItem("pageCount", pages);
-          localStorage.setItem("totalCost", total);
-          localStorage.setItem("uploadedFileNames", JSON.stringify(data.files));
-          window.location.href = "/options";
-        } else {
-          alert("Upload failed.");
-        }
-      } catch (err) {
-        console.error(err);
+    const formData = new FormData();
+    for (const file of files) {
+      formData.append("documents", file);
+    }
+
+    try {
+      const res = await fetch("/upload", { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (data.status === "ok") {
+        localStorage.setItem("sourceLanguage", sourceLang);
+        localStorage.setItem("targetLanguage", targetLang);
+        localStorage.setItem("pageCount", pages);
+        localStorage.setItem("totalCost", total);
+        localStorage.setItem("uploadedFileNames", JSON.stringify(data.files));
+        window.location.href = "/options";
+      } else {
         alert("Upload failed.");
       }
+    } catch (err) {
+      console.error(err);
+      alert("Upload failed.");
     }
-  </script>
+  }
+</script>
 </body>
 </html>
